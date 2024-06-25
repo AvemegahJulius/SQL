@@ -1,0 +1,69 @@
+ CREATE DATABASE monday_life ;
+ SELECT *
+ FROM supermarket 
+ LIMIT 5;
+ -- Last 5 rows --
+ SELECT *
+ FROM supermarket
+ ORDER BY `Invoice ID` DESC LIMIT 5 ;
+ -- random 5 rows --
+ SELECT * 
+ FROM supermarket 
+ ORDER BY rand() LIMIT 5;
+ 
+ -- Count, min, max, avg, and std values for a unique column--
+ SELECT COUNT(`gross income`),
+ MIN(`gross income`),
+ MAX(`gross income`),
+ AVG(`gross income`),
+ STD(`gross income`)
+ FROM supermarket;
+ 
+ -- find number of missing values--
+ SELECT COUNT(*) 
+ FROM supermarket
+ WHERE `branch` is NULL; 
+ 
+ -- count number of occurrence of each city --
+ SELECT city, COUNT(city)
+ FROM supermarket
+ GROUP BY city;
+ 
+ -- most profitable branch -- 
+  SELECT branch, SUM(`gross income`)
+  FROM supermarket
+  GROUP BY branch
+  ORDER BY SUM(`gross income`) DESC LIMIT 1;
+ 
+ -- Product line purchased in the highest quantity --
+ SELECT `Product line`, SUM(`Quantity`) 
+ FROM supermarket
+ GROUP BY `product line`
+ ORDER BY SUM(Quantity) DESC;
+ 
+ -- the city with the highest gross income -- 
+ SELECT `city`, SUM(`gross income`)
+ FROM supermarket
+ GROUP BY `city`
+ ORDER BY SUM(`gross income`) DESC;
+ 
+ -- the city with the sale by quantity --
+ SELECT `city`, SUM(`Quantity`) AS sum_quant
+ FROM supermarket
+ GROUP BY `city`
+ ORDER BY SUM(`Quantity`) DESC;
+ 
+ -- highest and lowest payment method city wise -- 
+ 
+ SELECT `city` ,
+ SUM(CASE WHEN Payment = "cash" THEN 1 ELSE 0 END) AS "cash",
+  SUM(CASE WHEN Payment = "Ewallet" THEN 1 ELSE 0 END) AS "Ewallet",
+   SUM(CASE WHEN Payment = "Credit card" THEN 1 ELSE 0 END) AS "Credit card"
+ FROM supermarket
+ GROUP BY `city`;
+
+-- day of the week with the highest sale -- 
+SELECT Dayname(Date), Dayofweek(Date), sum(`total`)
+FROM supermarket
+GROUP BY Dayname(Date), Dayofweek(Date) 
+ORDER BY sum(`total`) DESC;
